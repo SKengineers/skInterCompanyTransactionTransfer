@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_order_form_adding_smartbutton_inter_transfer" model="ir.ui.view">
+        <field name="name">view_order_form_adding_smartbutton_inter_transfer</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_inter_transfer" type="object" class="oe_stat_button" icon="fa-exchange" invisible="count_inter_transfer == 0">
+                    <field name="count_inter_transfer" widget="statinfo" string="Inter Transfer"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

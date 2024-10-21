@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_intercompany_transfer,access_intercompany_transfer,model_inter_company_transfer,agInterCompanyTransactionTransfer.group_allow_internal_transfer,1,1,1,1
+access_product_detail_inter_transfer,access_product_detail_inter_transfer,model_product_detail,agInterCompanyTransactionTransfer.group_allow_internal_transfer,1,1,1,1

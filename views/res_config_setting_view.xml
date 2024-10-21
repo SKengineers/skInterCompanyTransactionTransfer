@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="res_config_settings_view_form_adding_auto_intercompany_transfer" model="ir.ui.view">
+        <field name="name">res_config_settings_view_form_adding_auto_intercompany_transfer</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='pricing_setting_container']" position="after">
+                <block title="Setup Intercompany Transaction Details" id="intercompany_transaction_details">
+                  <setting id="allow_auto_inter_transaction" help="Click here to enable Auto Work Flow for Intercompany transaction">
+                        <field name="allow_auto_inter_transaction"/>
+                   </setting>
+                    <setting id="auto_validate_delivery_receipt" invisible="not allow_auto_inter_transaction">
+                        <field name="auto_validate_delivery_receipt" invisible="not allow_auto_inter_transaction"/>
+                   </setting>
+                    <setting id="auto_create_invoice_bill" invisible="not allow_auto_inter_transaction">
+                        <field name="auto_create_invoice_bill" invisible="not allow_auto_inter_transaction"/>
+                   </setting>
+                    <setting id="auto_validate_invoice_bill" invisible="not allow_auto_inter_transaction">
+                        <field name="auto_validate_invoice_bill" invisible="not allow_auto_inter_transaction"/>
+                   </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

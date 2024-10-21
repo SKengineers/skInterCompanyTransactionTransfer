@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data noupdate='1'>
+        <record id="sequence_inter_company_transfer" model="ir.sequence">
+            <field name="name">Inter Company Transfer</field>
+            <field name="code">inter.company.transfer</field>
+            <field name="prefix">INT/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+
+        <record id="sequence_inter_company_transfer_return" model="ir.sequence">
+            <field name="name">Return Inter Company Transfer</field>
+            <field name="code">return.inter.company.transfer</field>
+            <field name="prefix">RINT/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

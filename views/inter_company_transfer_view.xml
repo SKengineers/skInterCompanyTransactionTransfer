@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+       <record id="inter_company_transfer_tree_view" model="ir.ui.view">
+            <field name="name">inter_company_transfer_tree_view</field>
+            <field name="model">inter.company.transfer</field>
+            <field name="arch" type="xml">
+                <tree string="Inter Company Transfer">
+                    <field name="name"/>
+                    <field name="from_warehouse_id"/>
+                    <field name="to_warehouse_id"/>
+                    <field name="sale_order_id"/>
+                    <field name="purchase_order_id"/>
+                    <field name="type" column_invisible="1"/>
+                    <field name="state" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="inter_company_transfer_return_tree_view" model="ir.ui.view">
+            <field name="name">inter_company_transfer_return_tree_view</field>
+            <field name="model">inter.company.transfer</field>
+            <field name="arch" type="xml">
+                <tree string="Return Inter Company Transfer" create="false">
+                    <field name="name"/>
+                    <field name="from_warehouse_id"/>
+                    <field name="to_warehouse_id"/>
+                    <field name="type" column_invisible="1"/>
+                    <field name="state" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id='inter_company_transfer_search_view' model='ir.ui.view'>
+            <field name="name">inter_company_transfer_search_view</field>
+            <field name="model">inter.company.transfer</field>
+            <field name="arch" type="xml">
+                <search string="Inter Company Transfer Search">
+                    <field name="name"/>
+                    <field name="from_warehouse_id"/>
+                    <field name="to_warehouse_id"/>
+                    <field name="sale_order_id"/>
+                    <field name="purchase_order_id"/>
+                    <field name="apply_type"/>
+                    <field name="state"/>
+                    <!--group by views-->
+                    <group expand="1" string="Group By">
+                        <filter name="groupby_from_warehouse_id"
+                                context="{'group_by' : 'from_warehouse_id'}"
+                                string="From Warehouse"/>
+                        <filter name="groupby_to_warehouse_id"
+                                context="{'group_by' : 'to_warehouse_id'}"
+                                string="To Warehouse"/>
+                        <filter name="groupby_sale_order_id"
+                                context="{'group_by' : 'sale_order_id'}"
+                                string="Sale Order"/>
+                        <filter name="groupby_purchase_order_id"
+                                context="{'group_by' : 'purchase_order_id'}"
+                                string="Purchase Order"/>
+                        <filter name="groupby_apply_type"
+                                context="{'group_by' : 'apply_type'}"
+                                string="Apply Type"/>
+                        <filter name="groupby_state"
+                                context="{'group_by' : 'state'}"
+                                string="State"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="inter_company_transfer_form_view" model="ir.ui.view">
+            <field name="name">inter_company_transfer_form_view</field>
+            <field name="model">inter.company.transfer</field>
+            <field name="arch" type="xml">
+                <form string="Inter Company Transfer">
+                    <header>
+                        <button string="Process" type="object" name="action_process" class="oe_highlight" invisible="state != 'draft'"/>
+                        <button string="Return" type="object" name="action_return" class="oe_highlight" invisible="state in ['draft', 'return']"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_sale == 0">
+                                <field name="count_sale" widget="statinfo" string="Sale Order"/>
+                            </button>
+                            <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_invoice == 0">
+                                <field name="count_invoice" widget="statinfo" string="Invoice"/>
+                            </button>
+                            <button name="action_view_purchase_order" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_purchase == 0">
+                                <field name="count_purchase" widget="statinfo" string="Purchase Order"/>
+                            </button>
+                            <button name="action_view_bill" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_bill == 0">
+                                <field name="count_bill" widget="statinfo" string="Bill"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="type" invisible="1"/>
+                                <field name="from_warehouse_id" options="{'no_create': True}" required="1" readonly="state != 'draft'"/>
+                                <field name="from_company_id" invisible="1"/>
+                                <field name="to_warehouse_id" options="{'no_create': True}" required="1" readonly="state != 'draft'"/>
+                                <field name="to_company_id" invisible="1"/>
+
+                            </group>
+                            <group>
+                                <field name="apply_type" required="1" readonly="state != 'draft'"/>
+                                <field name="pricelist_id" required="0" options="{'no_create': True}" readonly="state != 'draft'" domain="[('currency_id', '=', currency_id), ('company_id', '=', from_company_id)]"/>
+                                <field name="currency_id" required="1" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="product_detail" string="Product Details">
+                                <field name="product_line_ids" readonly="state != 'draft'" required="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id" options="{'no_create': True}"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="inter_company_transfer_return_form_view" model="ir.ui.view">
+            <field name="name">inter_company_transfer_return_form_view</field>
+            <field name="model">inter.company.transfer</field>
+            <field name="arch" type="xml">
+                <form string="Return Inter Company Transfer" create="false">
+                    <header>
+                        <button string="Process" type="object" name="action_process" class="oe_highlight" invisible="state != 'draft'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,process"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_sale == 0">
+                                <field name="count_sale" widget="statinfo" string="Sale Order"/>
+                            </button>
+                            <button name="action_view_purchase_order" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_purchase == 0">
+                                <field name="count_purchase" widget="statinfo" string="Purchase Order"/>
+                            </button>
+                            <button name="action_view_inter_transaction_company" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="count_backorder_of == 0">
+                                <field name="count_backorder_of" widget="statinfo" string="Internal Transfer"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="type" invisible="1"/>
+                                <field name="from_warehouse_id" required="1" readonly="state != 'draft'"/>
+                                <field name="backorder_of_id" required="1" readonly="state != 'draft'"/>
+                                <field name="pricelist_id" required="0" readonly="state != 'draft'"/>
+
+                            </group>
+                            <group>
+                                <field name="to_warehouse_id" required="1" readonly="state != 'draft'"/>
+                                <field name="currency_id" required="1" readonly="state != 'draft'"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="product_detail" string="Product Details">
+                                <field name="product_line_ids" readonly="state != 'draft'" required="1">
+                                    <tree editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="inter_company_transfer_action_view" model="ir.actions.act_window">
+            <field name="name">Inter Company Transfer</field>
+            <field name="res_model">inter.company.transfer</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="inter_company_transfer_search_view"/>
+            <field name="domain">[('type', '=', 'transfer')]</field>
+            <field name="context">{'default_type': 'transfer', 'default_apply_type': 'sale_purchase'}</field>
+            <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('inter_company_transfer_tree_view')}), (0, 0, {'view_mode': 'form', 'view_id': ref('inter_company_transfer_form_view')})]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create yours Inter Company Transfer
+                </p>
+            </field>
+        </record>
+
+    <record id="inter_company_transfer_return_action_view" model="ir.actions.act_window">
+            <field name="name">Return Inter Company Transfer</field>
+            <field name="res_model">inter.company.transfer</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="inter_company_transfer_search_view"/>
+            <field name="domain">[('type', '=', 'return')]</field>
+            <field name="context">{'default_type': 'return'}</field>
+            <field name="view_ids" eval="[(5, 0, 0), (0, 0, {'view_mode': 'tree', 'view_id': ref('inter_company_transfer_return_tree_view')}), (0, 0, {'view_mode': 'form', 'view_id': ref('inter_company_transfer_return_form_view')})]"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create yours Return Inter Company Transfer
+                </p>
+            </field>
+        </record>
+
+
+
+
+    <menuitem id="master_intercompany_transfer" name="InterCompany Transaction"
+            parent="stock.menu_stock_root" sequence="5"/>
+
+         <menuitem id="inter_company_transaction" parent="master_intercompany_transfer"
+                  name="InterCompany Transaction" action="inter_company_transfer_action_view" sequence="1"/>
+
+        <menuitem id="return_inter_company_transaction" parent="master_intercompany_transfer"
+                  name="Return InterCompany Transaction" action="inter_company_transfer_return_action_view" sequence="2"/>
+
+
+
+
+</odoo>
